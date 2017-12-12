@@ -21,13 +21,6 @@ int main(void) {
 	}
 }
 
-void SysTick_Init(void) {
-	SYSTICK_STCSR = 0;
-	SYSTICK_STRVR = 0x00FFFFFF;
-	SYSTICK_STCVR = 0;
-	SYSTICK_STCSR = 0x00000005;
-}
-
 void UART0_init(void){
 	EUSCI_A0->CTLW0 |= 1;
 	EUSCI_A0->MCTLW = 0;
@@ -42,20 +35,6 @@ void UART0_init(void){
 void EUSCIA0_IRQHandler(void){
 	in = EUSCI_A0->RXBUF;
 	UART0_send(in);
-}
-
-void SysTick_wait(uint32_t delay) {
-	SYSTICK_STRVR = delay - 1;
-	SYSTICK_STCVR = 0;
-	while ((SYSTICK_STCSR & 0x00010000) == 0) {
-	}
-}
-
-void SysTick_wait1ms(uint32_t delay) {
-	uint32_t i;
-	for (i = 0; i < delay; i++) {
-		SysTick_wait(3000);
-	}
 }
 
 void UART0_send(char out) {
