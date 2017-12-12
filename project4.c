@@ -1,13 +1,7 @@
 #include "msp.h"
-#define SYSTICK_STCSR (*((volatile unsigned long *)0xE000E010))
-#define SYSTICK_STRVR (*((volatile unsigned long *)0xE000E014))
-#define SYSTICK_STCVR (*((volatile unsigned long *)0xE000E018))
 
 char in;
 
-void SysTick_Init(void);
-void SysTick_wait(uint32_t delay);
-void SysTick_wait1ms(uint32_t delay);
 void UART0_init(void);
 void UART0_send(char c);
 
