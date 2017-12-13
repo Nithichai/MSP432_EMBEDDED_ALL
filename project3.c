@@ -8,7 +8,6 @@ void SysTick_Init(void);
 void SysTick_wait(uint32_t delay);
 void SysTick_wait1ms(uint32_t delay);
 void Port_Init(void);
-void UART0_init(void);
 void UART0_send(char c);
 void Blink_Blue(void);
 void Blink_Green(void);
@@ -17,7 +16,6 @@ int main(void) {
 	Port_Init();
 	SysTick_Init();
 	__disable_irq();
-	UART0_init();
 	NVIC_EnableIRQ(PORT5_IRQn);
 	NVIC_EnableIRQ(PORT6_IRQn);
 	NVIC_EnableIRQ(EUSCIA0_IRQn);
@@ -95,17 +93,6 @@ void SysTick_Init(void) {
 	SYSTICK_STCSR = 0x00000005;
 }
 
-void UART0_init(void){
-	EUSCI_A0->CTLW0 |= 1;
-	EUSCI_A0->MCTLW = 0;
-	EUSCI_A0->CTLW0 = 0x0081;
-	EUSCI_A0->BRW = 312;
-	P1->SEL0 |= 0x0C;
-	P1->SEL1 &= ~0x0C;
-	EUSCI_A0->CTLW0 &= ~1;
-	EUSCI_A0->IE |= 1;
-}
-
 void SysTick_wait(uint32_t delay) {
 	SYSTICK_STRVR = delay - 1;
 	SYSTICK_STCVR = 0;
@@ -118,9 +105,4 @@ void SysTick_wait1ms(uint32_t delay) {
 	for (i = 0; i < delay; i++) {
 		SysTick_wait(3000);
 	}
-}
-
-void UART0_send(char out) {
-	while(!(EUSCI_A0->IFG & 0x02)){}
-		EUSCI_A0->TXBUF = out;
 }
